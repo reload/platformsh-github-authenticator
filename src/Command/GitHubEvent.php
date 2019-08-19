@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Git\Synchronizer;
+use App\GitHub\MembershipValidator;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Parser\WebhookResolver;
 use Symfony\Component\Console\Command\Command;
@@ -20,6 +21,9 @@ class GitHubEvent extends Command
     /* @var \Lpdigital\Github\Parser\WebhookResolver */
     private $resolver;
 
+    /* @var \App\GitHub\MembershipValidator */
+    private $validator;
+
     /* @var \App\Git\Synchronizer */
     private $synchronizer;
 
@@ -28,10 +32,12 @@ class GitHubEvent extends Command
 
     public function __construct(
         WebhookResolver $resolver,
+        MembershipValidator $validator,
         Synchronizer $synchronizer,
         array $eventData
     ) {
         $this->resolver = $resolver;
+        $this->validator = $validator;
         $this->synchronizer = $synchronizer;
         $this->eventData = $eventData;
 
@@ -46,11 +52,13 @@ class GitHubEvent extends Command
             throw new \UnexpectedValueException('Unsupported event type: ' . $event::name());
         }
 
-        $head = $event->pullRequest->getHead();
+        if ($this->validator->isMember($event->sender->getLogin())) {
+            $head = $event->pullRequest->getHead();
 
-        $this->synchronizer->synchronizeBranch(
-            $head['repo']['git_url'],
-            $head['ref']
-        );
+            $this->synchronizer->synchronizeBranch(
+                $head['repo']['git_url'],
+                $head['ref']
+            );
+        }
     }
 }

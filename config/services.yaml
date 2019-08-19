@@ -28,8 +28,13 @@ services:
     App\Command\GitHubEvent:
         arguments:
             - '@Lpdigital\Github\Parser\WebhookResolver'
+            - '@App\GitHub\MembershipValidator'
             - '@App\Git\Synchronizer'
             - '%env(json:file:GITHUB_EVENT_PATH)%'
+    App\GitHub\MembershipValidator:
+            - '@Github\Client'
+            - '%env(GITHUB_ORGANIZATION)%'
+            - '%env(GITHUB_TEAM)%'
     App\Git\Synchronizer:
         arguments:
             - '@GitWrapper\GitWrapper'
