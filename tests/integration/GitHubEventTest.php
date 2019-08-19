@@ -7,6 +7,7 @@ namespace App\Tests\integration;
 use App\Command\GitHubEvent;
 use App\Git\Synchronizer;
 use App\GitHub\MembershipValidator;
+use App\GitHub\StatusUpdater;
 use GitWrapper\GitWrapper;
 use Lpdigital\Github\Parser\WebhookResolver;
 use PHPUnit\Framework\TestCase;
@@ -51,9 +52,12 @@ class GitHubEventTest extends TestCase
         $validator = $this->createMock(MembershipValidator::class);
         $validator->method('isMember')->willReturn(true);
 
+        $statusUpdater = $this->createMock(StatusUpdater::class);
+
         $command = new GitHubEvent(
             new WebhookResolver(),
             $validator,
+            $statusUpdater,
             new Synchronizer(
                 new GitWrapper(),
                 $this->workingDirectory->path(),

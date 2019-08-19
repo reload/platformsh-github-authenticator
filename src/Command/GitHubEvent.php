@@ -6,6 +6,8 @@ namespace App\Command;
 
 use App\Git\Synchronizer;
 use App\GitHub\MembershipValidator;
+use App\GitHub\Status;
+use App\GitHub\StatusUpdater;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Parser\WebhookResolver;
 use Symfony\Component\Console\Command\Command;
@@ -24,6 +26,9 @@ class GitHubEvent extends Command
     /* @var \App\GitHub\MembershipValidator */
     private $validator;
 
+    /* @var \App\GitHub\StatusUpdater */
+    private $statusUpdater;
+
     /* @var \App\Git\Synchronizer */
     private $synchronizer;
 
@@ -33,11 +38,13 @@ class GitHubEvent extends Command
     public function __construct(
         WebhookResolver $resolver,
         MembershipValidator $validator,
+        StatusUpdater $statusUpdater,
         Synchronizer $synchronizer,
         array $eventData
     ) {
         $this->resolver = $resolver;
         $this->validator = $validator;
+        $this->statusUpdater = $statusUpdater;
         $this->synchronizer = $synchronizer;
         $this->eventData = $eventData;
 
@@ -55,9 +62,27 @@ class GitHubEvent extends Command
         if ($this->validator->isMember($event->sender->getLogin())) {
             $head = $event->pullRequest->getHead();
 
+            $status = new Status('pending');
+
+            $this->statusUpdater->createStatus(
+                $event->getRepository()->getOwner()->getLogin(),
+                $event->getRepository()->getName(),
+                $head['sha'],
+                $status
+            );
+
             $this->synchronizer->synchronizeBranch(
                 $head['repo']['git_url'],
                 $head['ref']
+            );
+
+            $status->withState('success');
+
+            $this->statusUpdater->createStatus(
+                $event->getRepository()->getOwner()->getLogin(),
+                $event->getRepository()->getName(),
+                $head['sha'],
+                $status
             );
         }
     }

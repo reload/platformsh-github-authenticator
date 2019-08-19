@@ -29,12 +29,17 @@ services:
         arguments:
             - '@Lpdigital\Github\Parser\WebhookResolver'
             - '@App\GitHub\MembershipValidator'
+            - '@App\GitHub\StatusUpdater'
             - '@App\Git\Synchronizer'
             - '%env(json:file:GITHUB_EVENT_PATH)%'
     App\GitHub\MembershipValidator:
             - '@Github\Client'
             - '%env(GITHUB_ORGANIZATION)%'
             - '%env(GITHUB_TEAM)%'
+    App\GitHub\StatusUpdater:
+        arguments:
+            - '@Github\Client'
+            - '%env(string:GITHUB_STATUS_CONTEXT)%'
     App\Git\Synchronizer:
         arguments:
             - '@GitWrapper\GitWrapper'
