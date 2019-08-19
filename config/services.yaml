@@ -25,3 +25,17 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Command\GitHubEvent:
+        arguments:
+            - '@Lpdigital\Github\Parser\WebhookResolver'
+            - '@App\Git\Synchronizer'
+            - '%env(json:file:GITHUB_EVENT_PATH)%'
+    App\Git\Synchronizer:
+        arguments:
+            - '@GitWrapper\GitWrapper'
+            - '%kernel.cache_dir%'
+            - '%env(string:REPO_URL)%'
+    Lpdigital\Github\Parser\WebhookResolver:
+        arguments: []
+    GitWrapper\GitWrapper:
+        arguments: []

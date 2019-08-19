@@ -1,4 +1,10 @@
 {
+    "cpliakas/git-wrapper": {
+        "version": "v2.2.0"
+    },
+    "lp-digital/github-event-parser": {
+        "version": "v0.8.3"
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -102,6 +108,9 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.12.0"
+    },
+    "symfony/process": {
+        "version": "v4.3.3"
     },
     "symfony/routing": {
         "version": "4.2",
