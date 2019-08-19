@@ -41,11 +41,17 @@
     "ocramius/package-versions": {
         "version": "1.4.0"
     },
+    "phpstan/extension-installer": {
+        "version": "1.0.1"
+    },
     "phpstan/phpdoc-parser": {
         "version": "0.3.5"
     },
     "phpstan/phpstan": {
         "version": "0.11.15"
+    },
+    "phpstan/phpstan-phpunit": {
+        "version": "0.11.2"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -55,6 +61,9 @@
     },
     "psr/log": {
         "version": "1.1.0"
+    },
+    "spatie/temporary-directory": {
+        "version": "1.2.0"
     },
     "squizlabs/php_codesniffer": {
         "version": "3.0",
@@ -67,6 +76,9 @@
         "files": [
             "phpcs.xml.dist"
         ]
+    },
+    "symfony/browser-kit": {
+        "version": "v4.3.3"
     },
     "symfony/cache": {
         "version": "v4.3.3"
@@ -90,10 +102,16 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v4.3.3"
+    },
     "symfony/debug": {
         "version": "v4.3.3"
     },
     "symfony/dependency-injection": {
+        "version": "v4.3.3"
+    },
+    "symfony/dom-crawler": {
         "version": "v4.3.3"
     },
     "symfony/dotenv": {
@@ -151,6 +169,22 @@
     "symfony/mime": {
         "version": "v4.3.3"
     },
+    "symfony/phpunit-bridge": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "b0582341f1df39aaf3a9a866cdbe49937da35984"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "config/bootstrap.php",
+            "phpunit.xml.dist",
+            "tests/.gitignore"
+        ]
+    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.12.0"
     },
@@ -184,10 +218,19 @@
     "symfony/service-contracts": {
         "version": "v1.1.5"
     },
+    "symfony/test-pack": {
+        "version": "v1.0.6"
+    },
     "symfony/var-exporter": {
         "version": "v4.3.3"
     },
     "symfony/yaml": {
         "version": "v4.3.3"
+    },
+    "thecodingmachine/phpstan-safe-rule": {
+        "version": "v0.1.4"
+    },
+    "thecodingmachine/safe": {
+        "version": "v0.1.16"
     }
 }
