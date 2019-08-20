@@ -6,6 +6,7 @@ namespace App\Tests\integration;
 
 use App\Command\GitHubEvent;
 use App\Git\Synchronizer;
+use App\GitHub\EventHandler;
 use App\GitHub\MembershipValidator;
 use App\GitHub\StatusUpdater;
 use GitWrapper\GitWrapper;
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\file_get_contents as file_get_contents;
 use function Safe\json_decode as json_decode;
 
-class GitHubEventTest extends TestCase
+class EventHandlerTest extends TestCase
 {
 
     /* @var \Spatie\TemporaryDirectory\TemporaryDirectory */
@@ -54,7 +55,7 @@ class GitHubEventTest extends TestCase
 
         $statusUpdater = $this->createMock(StatusUpdater::class);
 
-        $command = new GitHubEvent(
+        $handler = new EventHandler(
             new WebhookResolver(),
             $validator,
             $statusUpdater,
@@ -62,14 +63,10 @@ class GitHubEventTest extends TestCase
                 new GitWrapper(),
                 $this->workingDirectory->path(),
                 $this->targetDirectory->path()
-            ),
-            $json
+            )
         );
 
-        $command->run(
-            $this->createMock(InputInterface::class),
-            $this->createMock(OutputInterface::class)
-        );
+        $handler->handle($json);
 
         $this->assertContains('changes', $this->targetRepo->getBranches()->all());
     }

@@ -25,13 +25,12 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Command\GitHubEvent:
+    App\GitHub\EventHandler:
         arguments:
             - '@Lpdigital\Github\Parser\WebhookResolver'
             - '@App\GitHub\MembershipValidator'
             - '@App\GitHub\StatusUpdater'
             - '@App\Git\Synchronizer'
-            - '%env(json:file:GITHUB_EVENT_PATH)%'
     App\GitHub\MembershipValidator:
             - '@Github\Client'
             - '%env(GITHUB_ORGANIZATION)%'
