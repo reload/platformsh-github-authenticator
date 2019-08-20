@@ -1,0 +1,12 @@
+name: 'Platform.sh GitHub Authenticator'
+description: 'Only create PR environments for approved GitHub users'
+author: 'Reload'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args: ['app:github-event']
+
+branding:
+  icon: 'upload-cloud'
+  color: 'gray-dark'

@@ -1,0 +1,17 @@
+on: pull_request
+name: Sync repository
+jobs:
+    sync:
+      name: Sync
+      runs-on: ubuntu-latest
+      steps:
+        - name: Show event
+          run: cat ${GITHUB_EVENT_PATH}
+        - uses: actions/checkout@master
+        - name: Sync
+          uses: './.github/actions/sync'
+          env:
+            REPO_URL: https://github.com/kasperg/platformsh-github-authenticator
+            GITHUB_ORGANIZATION: reload
+            GITHUB_TEAM: developers
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
