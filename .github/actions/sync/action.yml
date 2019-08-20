@@ -5,7 +5,6 @@ author: 'Reload'
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args: ['app:github-event']
 
 branding:
   icon: 'upload-cloud'
