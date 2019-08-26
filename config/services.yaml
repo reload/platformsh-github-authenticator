@@ -48,3 +48,17 @@ services:
         arguments: []
     GitWrapper\GitWrapper:
         arguments: []
+    Http\Client\HttpClient:
+        class: 'Http\Client\Common\PluginClient'
+        arguments:
+          - '@HttpClient'
+          - ['@Http\Client\Common\Plugin\LoggerPlugin']
+    Http\Client\Common\Plugin\LoggerPlugin:
+        arguments:
+          - '@logger'
+          - '@Http\Message\Formatter\FullHttpMessageFormatter'
+    Http\Message\Formatter\FullHttpMessageFormatter:
+        arguments: []
+    HttpClient:
+        class: 'Http\Client\HttpClient'
+        factory: ['Http\Discovery\HttpClientDiscovery', 'find' ]
