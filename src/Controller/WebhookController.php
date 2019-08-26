@@ -8,6 +8,8 @@ use App\GitHub\EventHandler;
 use Swop\Bundle\GitHubWebHookBundle\Annotation\GitHubWebHook;
 use Swop\GitHubWebHook\Event\GitHubEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,7 +40,15 @@ class WebhookController extends AbstractController
             return ['status' => 'success'];
         }
 
-        $this->messageBus->dispatch($gitHubEvent);
-        return ['status' => 'success'];
+        try {
+            $event = $this->eventHandler->parseMessage($gitHubEvent->getPayload());
+        } catch (\UnexpectedValueException $e) {
+            throw new BadRequestHttpException($e->getMessage(), $e);
+        }
+        if (!$this->eventHandler->isAuthorized($event)) {
+            return ['status' => 'user not authorized'];
+        }
+        $this->messageBus->dispatch($event);
+        return ['status' => 'event dispatched'];
     }
 }

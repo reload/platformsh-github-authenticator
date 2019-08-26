@@ -53,12 +53,9 @@ class EventHandlerTest extends TestCase
         $validator = $this->createMock(MembershipValidator::class);
         $validator->method('isMember')->willReturn(true);
 
-        $statusUpdater = $this->createMock(StatusUpdater::class);
-
         $handler = new EventHandler(
             new WebhookResolver(),
             $validator,
-            $statusUpdater,
             new Synchronizer(
                 new GitWrapper(),
                 $this->workingDirectory->path(),

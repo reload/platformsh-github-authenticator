@@ -6,6 +6,7 @@ namespace App\GitHub;
 
 use App\Git\Synchronizer;
 use Lpdigital\Github\EventType\PullRequestEvent;
+use Lpdigital\Github\Exception\EventNotFoundException;
 use Lpdigital\Github\Parser\WebhookResolver;
 
 class EventHandler
@@ -26,48 +27,46 @@ class EventHandler
     public function __construct(
         WebhookResolver $resolver,
         MembershipValidator $validator,
-        StatusUpdater $statusUpdater,
         Synchronizer $synchronizer
     ) {
         $this->resolver = $resolver;
         $this->validator = $validator;
-        $this->statusUpdater = $statusUpdater;
         $this->synchronizer = $synchronizer;
     }
 
     public function handle(array $eventData)
     {
+        $event = $this->parseMessage($eventData);
+        if ($this->isAuthorized($event)) {
+            $this->synchronize($event);
+        }
+    }
+
+    public function parseMessage(array $eventData): PullRequestEvent
+    {
         /* @var \Lpdigital\Github\EventType\GithubEventInterface $event */
-        $event = $this->resolver->resolve($eventData);
+        try {
+            $event = $this->resolver->resolve($eventData);
+        } catch (EventNotFoundException $e) {
+            throw new \UnexpectedValueException('Unable to determine event type', 0, $e);
+        }
         if (!$event instanceof PullRequestEvent) {
             throw new \UnexpectedValueException('Unsupported event type: ' . $event::name());
         }
+        return $event;
+    }
 
-        if ($this->validator->isMember($event->sender->getLogin())) {
-            $head = $event->pullRequest->getHead();
+    public function isAuthorized($event): bool
+    {
+        return $this->validator->isMember($event->sender->getLogin());
+    }
 
-            $status = new Status('pending');
-
-            $this->statusUpdater->createStatus(
-                $event->getRepository()->getOwner()->getLogin(),
-                $event->getRepository()->getName(),
-                $head['sha'],
-                $status
-            );
-
-            $this->synchronizer->synchronizeBranch(
-                $head['repo']['git_url'],
-                $head['ref']
-            );
-
-            $status->withState('success');
-
-            $this->statusUpdater->createStatus(
-                $event->getRepository()->getOwner()->getLogin(),
-                $event->getRepository()->getName(),
-                $head['sha'],
-                $status
-            );
-        }
+    public function synchronize(PullRequestEvent $event): void
+    {
+        $head = $event->pullRequest->getHead();
+        $this->synchronizer->synchronizeBranch(
+            $head['repo']['git_url'],
+            $head['ref']
+        );
     }
 }

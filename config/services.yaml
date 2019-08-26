@@ -29,7 +29,6 @@ services:
         arguments:
             - '@Lpdigital\Github\Parser\WebhookResolver'
             - '@App\GitHub\MembershipValidator'
-            - '@App\GitHub\StatusUpdater'
             - '@App\Git\Synchronizer'
     App\GitHub\MembershipValidator:
             - '@Github\Client'

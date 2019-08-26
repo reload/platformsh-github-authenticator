@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\MessageHandler;
 
 use App\GitHub\EventHandler;
-use Swop\GitHubWebHook\Event\GitHubEvent;
+use Lpdigital\Github\EventType\PullRequestEvent;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-class GitHubEventHandler implements MessageHandlerInterface
+class PullRequestEventHandler implements MessageHandlerInterface
 {
 
     /* @var \App\GitHub\EventHandler */
@@ -19,8 +19,8 @@ class GitHubEventHandler implements MessageHandlerInterface
         $this->eventHandler = $eventHandler;
     }
 
-    public function __invoke(GitHubEvent $event)
+    public function __invoke(PullRequestEvent $event)
     {
-        $this->eventHandler->handle($event->getPayload());
+        $this->eventHandler->synchronize($event);
     }
 }

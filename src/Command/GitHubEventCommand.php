@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\GitHub\EventHandler;
 use Swop\GitHubWebHook\Event\GitHubEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,12 +20,17 @@ class GitHubEventCommand extends Command
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'app:github-event';
 
+    /* @var \App\GitHub\EventHandler */
+    private $eventHandler;
+
     /* @var \Symfony\Component\Messenger\MessageBusInterface */
     private $messageBus;
 
     public function __construct(
+        EventHandler $eventHandler,
         MessageBusInterface $messageBus
     ) {
+        $this->eventHandler = $eventHandler;
         $this->messageBus = $messageBus;
 
         parent::__construct();
@@ -39,8 +45,10 @@ class GitHubEventCommand extends Command
     {
         $file = file_get_contents($this->getStringArgument($input, 'event'));
         $json = json_decode($file, true);
-        $event = new GitHubEvent('pull_request', $json);
-        $this->messageBus->dispatch($event);
+        $event = $this->eventHandler->parseMessage($json);
+        if ($this->eventHandler->isAuthorized($event)) {
+            $this->messageBus->dispatch($event);
+        }
     }
 
     private function getStringArgument(InputInterface $input, string $argument): string
