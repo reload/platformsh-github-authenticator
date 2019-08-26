@@ -1,6 +1,12 @@
 {
     "type": "project",
     "license": "proprietary",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wesnick/github-webhook-bundle"
+        }
+    ],
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
@@ -10,6 +16,7 @@
         "lp-digital/github-event-parser": "^0.8.3",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/logger-plugin": "^1.1",
+        "swop/github-webhook-bundle": "dev-symfony4",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",
         "symfony/flex": "^1.3.1",

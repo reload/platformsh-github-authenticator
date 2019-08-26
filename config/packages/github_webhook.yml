@@ -1,0 +1,2 @@
+github_webhook:
+  default_secret: '%env(GITHUB_WEBHOOK_SECRET)%'

@@ -8,6 +8,36 @@
     "cpliakas/git-wrapper": {
         "version": "v2.2.0"
     },
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
+    "doctrine/cache": {
+        "version": "v1.8.0"
+    },
+    "doctrine/collections": {
+        "version": "v1.6.2"
+    },
+    "doctrine/event-manager": {
+        "version": "v1.0.0"
+    },
+    "doctrine/lexer": {
+        "version": "1.1.0"
+    },
+    "doctrine/persistence": {
+        "version": "1.1.1"
+    },
+    "doctrine/reflection": {
+        "version": "v1.0.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -119,6 +149,18 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
+    },
     "spatie/temporary-directory": {
         "version": "1.2.0"
     },
@@ -133,6 +175,12 @@
         "files": [
             "phpcs.xml.dist"
         ]
+    },
+    "swop/github-webhook": {
+        "version": "v2.0"
+    },
+    "swop/github-webhook-bundle": {
+        "version": "1.0.x-dev"
     },
     "symfony/browser-kit": {
         "version": "v4.3.3"
@@ -260,6 +308,9 @@
     "symfony/process": {
         "version": "v4.3.3"
     },
+    "symfony/psr-http-message-bridge": {
+        "version": "v1.2.0"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
@@ -292,5 +343,8 @@
     },
     "thecodingmachine/safe": {
         "version": "v0.1.16"
+    },
+    "zendframework/zend-diactoros": {
+        "version": "1.8.7"
     }
 }
