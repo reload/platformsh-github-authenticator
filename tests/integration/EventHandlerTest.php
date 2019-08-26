@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\integration;
 
-use App\Command\GitHubEvent;
+use App\Command\GitHubEventCommand;
 use App\Git\Synchronizer;
 use App\GitHub\EventHandler;
 use App\GitHub\MembershipValidator;
