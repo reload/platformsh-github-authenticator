@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\integration;
 
 use App\Command\GitHubEventCommand;
-use App\Git\Synchronizer;
+use App\GitHub\Synchronizer;
 use App\GitHub\EventHandler;
 use App\GitHub\MembershipValidator;
 use App\GitHub\StatusUpdater;
@@ -58,6 +58,8 @@ class EventHandlerTest extends TestCase
             $validator,
             new Synchronizer(
                 new GitWrapper(),
+                'username',
+                'password',
                 $this->workingDirectory->path(),
                 $this->targetDirectory->path()
             )

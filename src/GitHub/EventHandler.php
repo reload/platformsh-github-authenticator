@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\GitHub;
 
-use App\Git\Synchronizer;
+use App\GitHub\Synchronizer;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Exception\EventNotFoundException;
 use Lpdigital\Github\Parser\WebhookResolver;
@@ -21,7 +21,7 @@ class EventHandler
     /* @var \App\GitHub\StatusUpdater */
     private $statusUpdater;
 
-    /* @var \App\Git\Synchronizer */
+    /* @var \App\GitHub\Synchronizer */
     private $synchronizer;
 
     public function __construct(
@@ -65,7 +65,7 @@ class EventHandler
     {
         $head = $event->pullRequest->getHead();
         $this->synchronizer->synchronizeBranch(
-            $head['repo']['git_url'],
+            $head['repo']['clone_url'],
             $head['ref']
         );
     }

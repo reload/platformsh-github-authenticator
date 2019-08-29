@@ -29,7 +29,7 @@ services:
         arguments:
             - '@Lpdigital\Github\Parser\WebhookResolver'
             - '@App\GitHub\MembershipValidator'
-            - '@App\Git\Synchronizer'
+            - '@App\GitHub\Synchronizer'
     App\GitHub\MembershipValidator:
             - '@Github\Client'
             - '%env(GITHUB_ORGANIZATION)%'
@@ -38,9 +38,11 @@ services:
         arguments:
             - '@Github\Client'
             - '%env(string:GITHUB_STATUS_CONTEXT)%'
-    App\Git\Synchronizer:
+    App\GitHub\Synchronizer:
         arguments:
             - '@GitWrapper\GitWrapper'
+            - '%env(string:GITHUB_USERNAME)%'
+            - '%env(string:GITHUB_SECRET)%'
             - '%kernel.cache_dir%'
             - '%env(string:REPO_URL)%'
     Lpdigital\Github\Parser\WebhookResolver:
