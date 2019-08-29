@@ -1,0 +1,33 @@
+version: '3'
+services:
+  web:
+    image: thecodingmachine/php:7.2-v2-cli
+    ports:
+      - 8080
+    command: php -S 0.0.0.0:8080 -t public/
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      PHP_EXTENSION_REDIS: 1
+      STARTUP_COMMAND_1: composer install
+      APP_ENV: local
+      MESSENGER_TRANSPORT_DSN: redis://redis:6379/messages
+  redis:
+    image: redis:5-alpine
+  worker:
+    image: thecodingmachine/php:7.2-v2-cli
+    command: ./bin/console messenger:consume -vvv
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      PHP_EXTENSION_REDIS: 1
+      STARTUP_COMMAND_1: composer install
+      APP_ENV: local
+      MESSENGER_TRANSPORT_DSN: redis://redis:6379/messages
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - 4040
+    environment:
+      VIRTUAL_HOST: ngrok.docker
+      NGROK_PORT: web:8080
