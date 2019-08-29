@@ -12,6 +12,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "cpliakas/git-wrapper": "^2.2",
+        "cweagans/composer-patches": "^1.6",
         "knplabs/github-api": "^2.11",
         "lp-digital/github-event-parser": "^0.8.3",
         "php-http/guzzle6-adapter": "^1.1",
@@ -75,6 +76,11 @@
         "symfony/symfony": "*"
     },
     "extra": {
+        "patches": {
+            "cpliakas/git-wrapper": {
+                "Symfony 4.3 compatibility": "https://github.com/cpliakas/git-wrapper/pull/176.patch"
+            }
+        },
         "symfony": {
             "allow-contrib": false,
             "require": "4.3.*"

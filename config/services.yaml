@@ -49,6 +49,11 @@ services:
         arguments: []
     GitWrapper\GitWrapper:
         arguments: []
+        calls:
+          - [ 'addLoggerEventSubscriber', ['@GitWrapper\Event\GitLoggerEventSubscriber'] ]
+    GitWrapper\Event\GitLoggerEventSubscriber:
+        arguments:
+          - '@logger'
     Http\Client\HttpClient:
         class: 'Http\Client\Common\PluginClient'
         arguments:
