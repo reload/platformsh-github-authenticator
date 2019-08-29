@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Event\PullRequestAuthorized;
 use App\GitHub\EventHandler;
-use Swop\GitHubWebHook\Event\GitHubEvent;
+use Lpdigital\Github\EventType\PullRequestEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,7 +48,7 @@ class GitHubEventCommand extends Command
         $json = json_decode($file, true);
         $event = $this->eventHandler->parseMessage($json);
         if ($this->eventHandler->isAuthorized($event)) {
-            $this->messageBus->dispatch($event);
+            $this->messageBus->dispatch(new PullRequestAuthorized($event->pullRequest));
         }
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GitHub;
 
 use App\GitHub\Synchronizer;
+use Lpdigital\Github\Entity\PullRequest;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Exception\EventNotFoundException;
 use Lpdigital\Github\Parser\WebhookResolver;
@@ -38,7 +39,7 @@ class EventHandler
     {
         $event = $this->parseMessage($eventData);
         if ($this->isAuthorized($event)) {
-            $this->synchronize($event);
+            $this->synchronize($event->pullRequest);
         }
     }
 
@@ -56,14 +57,14 @@ class EventHandler
         return $event;
     }
 
-    public function isAuthorized($event): bool
+    public function isAuthorized(PullRequestEvent $event): bool
     {
         return $this->validator->isMember($event->sender->getLogin());
     }
 
-    public function synchronize(PullRequestEvent $event): void
+    public function synchronize(PullRequest $pullRequest): void
     {
-        $head = $event->pullRequest->getHead();
+        $head = $pullRequest->getHead();
         $this->synchronizer->synchronizeBranch(
             $head['repo']['clone_url'],
             $head['ref']

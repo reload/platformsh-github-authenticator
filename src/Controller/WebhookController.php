@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Event\PullRequestAuthorized;
 use App\GitHub\EventHandler;
 use Swop\Bundle\GitHubWebHookBundle\Annotation\GitHubWebHook;
 use Swop\GitHubWebHook\Event\GitHubEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -48,7 +48,7 @@ class WebhookController extends AbstractController
         if (!$this->eventHandler->isAuthorized($event)) {
             return ['status' => 'user not authorized'];
         }
-        $this->messageBus->dispatch($event);
+        $this->messageBus->dispatch(new PullRequestAuthorized($event->pullRequest));
         return ['status' => 'event dispatched'];
     }
 }
