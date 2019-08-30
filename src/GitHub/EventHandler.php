@@ -78,9 +78,21 @@ class EventHandler
         );
     }
 
+    public function delete(PullRequest $pullRequest): void
+    {
+        $head = $pullRequest->getHead();
+        $this->synchronizer->deleteBranch($head['ref']);
+    }
+
     public function publishEnvironment(PullRequest $pullRequest): string
     {
         $head = $pullRequest->getHead();
         return $this->environmentManager->activate($head['ref']);
+    }
+
+    public function deactivateEnvironment(PullRequest $pullRequest): void
+    {
+        $head = $pullRequest->getHead();
+        $this->environmentManager->deactivate($head['ref']);
     }
 }

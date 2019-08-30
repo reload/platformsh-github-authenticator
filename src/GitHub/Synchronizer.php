@@ -41,16 +41,25 @@ class Synchronizer
 
     public function synchronizeBranch(string $repoUrl, string $branch)
     {
-        $targetDirectory = $this->workingDirectory . '/' . uniqid();
-
         $repoUrl = Url::fromString($repoUrl);
         $authorizedRepoUrl = (string) $repoUrl->withUserInfo($this->username, $this->password);
 
-        $repository = $this->git->cloneRepository($authorizedRepoUrl, $targetDirectory);
+        $repository = $this->git->cloneRepository($authorizedRepoUrl, $this->getWorkDirectory());
         $repository->checkout($branch);
 
         $repository->addRemote('target', $this->targetRepoUrl);
 
         $repository->push('--force', 'target', $branch);
+    }
+
+    public function deleteBranch(string $branch)
+    {
+        $repository = $this->git->cloneRepository($this->targetRepoUrl, $this->getWorkDirectory());
+        $repository->push('--delete', 'origin', $branch);
+    }
+
+    protected function getWorkDirectory(): string
+    {
+        return $this->workingDirectory . DIRECTORY_SEPARATOR . uniqid();
     }
 }
