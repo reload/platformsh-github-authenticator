@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\GitHub;
 
-use App\GitHub\Synchronizer;
+use App\Platformsh\EnvironmentManager;
 use Lpdigital\Github\Entity\PullRequest;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Exception\EventNotFoundException;
 use Lpdigital\Github\Parser\WebhookResolver;
+use Platformsh\Client\PlatformClient;
 
 class EventHandler
 {
@@ -25,14 +26,19 @@ class EventHandler
     /* @var \App\GitHub\Synchronizer */
     private $synchronizer;
 
+    /* @var \App\Platformsh\EnvironmentManager */
+    private $environmentManager;
+
     public function __construct(
         WebhookResolver $resolver,
         MembershipValidator $validator,
-        Synchronizer $synchronizer
+        Synchronizer $synchronizer,
+        EnvironmentManager $environmentManager
     ) {
         $this->resolver = $resolver;
         $this->validator = $validator;
         $this->synchronizer = $synchronizer;
+        $this->environmentManager = $environmentManager;
     }
 
     public function handle(array $eventData)
@@ -40,6 +46,7 @@ class EventHandler
         $event = $this->parseMessage($eventData);
         if ($this->isAuthorized($event)) {
             $this->synchronize($event->pullRequest);
+            $this->publishEnvironment($event->pullRequest);
         }
     }
 
@@ -69,5 +76,11 @@ class EventHandler
             $head['repo']['clone_url'],
             $head['ref']
         );
+    }
+
+    public function publishEnvironment(PullRequest $pullRequest): string
+    {
+        $head = $pullRequest->getHead();
+        return $this->environmentManager->activate($head['ref']);
     }
 }

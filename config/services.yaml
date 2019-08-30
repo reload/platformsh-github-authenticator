@@ -49,6 +49,10 @@ services:
         arguments:
           - '%env(string:GIT_PRIVATE_KEY)%'
           - '%kernel.cache_dir%'
+    App\Platformsh\EnvironmentManager:
+      arguments:
+        - '@Platformsh\Client\PlatformClient'
+        - '%env(string:PLATFORMSH_PROJECT)%'
     Lpdigital\Github\Parser\WebhookResolver:
         arguments: []
     GitWrapper\GitWrapper:
@@ -69,3 +73,9 @@ services:
     HttpClient:
         class: 'Http\Client\HttpClient'
         factory: ['Http\Discovery\HttpClientDiscovery', 'find' ]
+    Platformsh\Client\PlatformClient:
+        arguments:
+          - '@Platformsh\Client\Connection\Connector'
+    Platformsh\Client\Connection\Connector:
+        calls:
+          - [ 'setApiToken', [ '%env(string:PLATFORMSH_API_TOKEN)%', 'exchange' ] ]

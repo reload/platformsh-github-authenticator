@@ -9,6 +9,7 @@ use App\GitHub\Synchronizer;
 use App\GitHub\EventHandler;
 use App\GitHub\MembershipValidator;
 use App\GitHub\StatusUpdater;
+use App\Platformsh\EnvironmentManager;
 use GitWrapper\GitWrapper;
 use Lpdigital\Github\Parser\WebhookResolver;
 use PHPUnit\Framework\TestCase;
@@ -53,6 +54,8 @@ class EventHandlerTest extends TestCase
         $validator = $this->createMock(MembershipValidator::class);
         $validator->method('isMember')->willReturn(true);
 
+        $environmentManager = $this->createMock(EnvironmentManager::class);
+
         $handler = new EventHandler(
             new WebhookResolver(),
             $validator,
@@ -62,7 +65,8 @@ class EventHandlerTest extends TestCase
                 'password',
                 $this->workingDirectory->path(),
                 $this->targetDirectory->path()
-            )
+            ),
+            $environmentManager
         );
 
         $handler->handle($json);

@@ -23,7 +23,8 @@ class EnvironmentDeploymentCompletedHandler implements MessageHandlerInterface
     public function __invoke(EnvironmentDeploymentCompleted $event)
     {
         $status = (new Status('success'))
-            ->withDescription('Deployment completed');
+            ->withDescription('Deployment completed')
+            ->withTargetUrl($event->getEnvironmentUri());
         $this->updateStatus($event->getPullRequest(), $status);
     }
 }

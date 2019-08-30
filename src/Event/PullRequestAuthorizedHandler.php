@@ -27,6 +27,7 @@ class PullRequestAuthorizedHandler implements MessageHandlerInterface
     {
         $this->messageBus->dispatch(new EnvironmentDeploymentStarted($event->getPullRequest()));
         $this->eventHandler->synchronize($event->getPullRequest());
-        $this->messageBus->dispatch(new EnvironmentDeploymentCompleted($event->getPullRequest()));
+        $environmentUri = $this->eventHandler->publishEnvironment($event->getPullRequest());
+        $this->messageBus->dispatch(new EnvironmentDeploymentCompleted($event->getPullRequest(), $environmentUri));
     }
 }
