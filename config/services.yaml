@@ -44,12 +44,17 @@ services:
             - '%env(string:GITHUB_USERNAME)%'
             - '%env(string:GITHUB_SECRET)%'
             - '%kernel.cache_dir%'
-            - '%env(string:REPO_URL)%'
+            - '%env(string:GIT_REPO_URL)%'
+    App\EventSubscriber\GitPrivateKeyFileGenerator:
+        arguments:
+          - '%env(string:GIT_PRIVATE_KEY)%'
+          - '%kernel.cache_dir%'
     Lpdigital\Github\Parser\WebhookResolver:
         arguments: []
     GitWrapper\GitWrapper:
         arguments: []
         calls:
+          - [ 'setDispatcher', ['@event_dispatcher'] ]
           - [ 'addLoggerEventSubscriber', ['@GitWrapper\Event\GitLoggerEventSubscriber'] ]
     GitWrapper\Event\GitLoggerEventSubscriber:
         arguments:
