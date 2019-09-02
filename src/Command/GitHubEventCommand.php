@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Event\PullRequestAuthorized;
-use App\Event\PullRequestSynchronized;
-use App\GitHub\EventHandler;
 use App\GitHub\MembershipValidator;
 use Lpdigital\Github\EventType\PullRequestEvent;
 use Lpdigital\Github\Parser\WebhookResolver;
