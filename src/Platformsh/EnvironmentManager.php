@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Platformsh;
 
+use Platformsh\Client\Model\Activity;
 use Platformsh\Client\PlatformClient;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -25,23 +26,18 @@ class EnvironmentManager implements LoggerAwareInterface
         $this->project = $project;
     }
 
-    public function activate(string $id) : string
+    public function activate(string $id)
     {
         $environment = $this->getEnvironment($id);
 
         if (!$environment->isActive()) {
             $activity = $environment->activate();
-            $activity->wait(null, $this->activityLogger());
-            $this->logger->info($activity->getProperty('log'));
         }
-        return $environment->getUri();
     }
 
     public function deactivate(string $id)
     {
-        $activity = $this->getEnvironment($id)->deactivate();
-        $activity->wait(null, $this->activityLogger());
-        $this->logger->info($activity->getProperty('log'));
+        $this->getEnvironment($id)->deactivate();
     }
 
     private function getEnvironment(string $id)
@@ -61,10 +57,25 @@ class EnvironmentManager implements LoggerAwareInterface
         return $environment;
     }
 
-    private function activityLogger(): callable
+    public function isReady($id) : bool
     {
-        return function (string $message) {
-            $this->logger->info($message);
-        };
+        $environment = $this->getEnvironment($id);
+        $activities = array_merge(
+            $environment->getActivities(1, 'environment.push'),
+            $environment->getActivities(1, 'environment.activate')
+        );
+        $incomplete_activities = array_filter(
+            $activities,
+            function (Activity $activity) {
+                return $activity->isComplete();
+            }
+        );
+        return !empty($incomplete_activities);
+    }
+
+    public function getEnvironmentUrl(string $id)
+    {
+        $environment = $this->getEnvironment($id);
+        return $environment->getUri();
     }
 }

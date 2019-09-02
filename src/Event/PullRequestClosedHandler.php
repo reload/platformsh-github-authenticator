@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Event;
 
 use App\GitHub\EventHandler;
+use App\GitHub\Synchronizer;
+use App\Platformsh\EnvironmentManager;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -12,20 +14,21 @@ class PullRequestClosedHandler implements MessageHandlerInterface
 {
 
     /* @var \App\GitHub\EventHandler */
-    private $eventHandler;
+    private $synchronizer;
 
-    /* @var \Symfony\Component\Messenger\MessageBusInterface */
-    private $messageBus;
+    /* @var \App\Platformsh\EnvironmentManager */
+    private $environmentManager;
 
-    public function __construct(EventHandler $eventHandler, MessageBusInterface $messageBus)
+    public function __construct(Synchronizer $synchronizer, EnvironmentManager $environmentManager)
     {
-        $this->eventHandler = $eventHandler;
-        $this->messageBus = $messageBus;
+        $this->synchronizer = $synchronizer;
+        $this->environmentManager = $environmentManager;
     }
 
     public function __invoke(PullRequestClosed $event)
     {
-        $this->eventHandler->deactivateEnvironment($event->getPullRequest());
-        $this->eventHandler->delete($event->getPullRequest());
+        $head = $event->getPullRequest()->getHead();
+        $this->environmentManager->deactivate($head['ref']);
+        $this->synchronizer->deleteBranch($head['ref']);
     }
 }
