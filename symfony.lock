@@ -111,6 +111,9 @@
     "makasim/temp-file": {
         "version": "0.2.0"
     },
+    "mikey179/vfsstream": {
+        "version": "v1.6.7"
+    },
     "nette/bootstrap": {
         "version": "v3.0.0"
     },
