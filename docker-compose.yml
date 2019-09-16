@@ -8,22 +8,18 @@ services:
     volumes:
       - ./:/usr/src/app
     environment:
-      PHP_EXTENSION_REDIS: 1
       STARTUP_COMMAND_1: composer install
       APP_ENV: local
-      MESSENGER_TRANSPORT_DSN: redis://redis:6379/messages
-  redis:
-    image: redis:5-alpine
+      ENQUEUE_DSN: file://%kernel.project_dir%/var/queue
   worker:
     image: thecodingmachine/php:7.2-v2-cli
     command: ./bin/console messenger:consume -vvv
     volumes:
       - ./:/usr/src/app
     environment:
-      PHP_EXTENSION_REDIS: 1
       STARTUP_COMMAND_1: composer install
       APP_ENV: local
-      MESSENGER_TRANSPORT_DSN: redis://redis:6379/messages
+      ENQUEUE_DSN: file://%kernel.project_dir%/var/queue
   ngrok:
     image: wernight/ngrok
     ports:
