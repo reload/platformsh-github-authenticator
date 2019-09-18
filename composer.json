@@ -12,6 +12,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "bref/bref": "^0.5.5",
+        "bref/symfony-messenger-sns": "^0.2.0",
         "cpliakas/git-wrapper": "^2.2",
         "cweagans/composer-patches": "^1.6",
         "enqueue/fs": "^0.9.12",
