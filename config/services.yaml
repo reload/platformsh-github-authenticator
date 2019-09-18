@@ -58,6 +58,7 @@ services:
     GitWrapper\GitWrapper:
         arguments: []
         calls:
+          - [ 'setTimeout', [840] ]
           - [ 'setDispatcher', ['@event_dispatcher'] ]
     Http\Client\HttpClient:
         class: 'Http\Client\Common\PluginClient'
