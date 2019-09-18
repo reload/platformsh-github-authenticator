@@ -1,0 +1,30 @@
+service: platformsh-github-authenticator
+
+provider:
+  name: aws
+  region: eu-central-1
+  runtime: provided
+  environment:
+    APP_ENV: prod
+    APP_DEBUG: true
+
+plugins:
+  - ./vendor/bref/bref
+
+functions:
+  api:
+    handler: public/index.php
+    timeout: 30 # in seconds (API Gateway has a timeout of 30 seconds)
+    layers:
+      - ${bref:layer.php-73-fpm}
+    events:
+      -   http: 'ANY /'
+      -   http: 'ANY /{proxy+}'
+  worker:
+    handler: vendor/bin/message-consumer
+    timeout: 900
+    layers:
+      - ${bref:layer.php-73} # PHP
+      - arn:aws:lambda:eu-central-1:553035198032:layer:git:6
+    events:
+      - sns: platformsh-github-authenticator-dev
