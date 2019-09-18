@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72d4aec520443e96325713b202dc8655",
+    "content-hash": "0966c67cdfc9bf2bc32768f5cb9d5f8f",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -5240,6 +5240,45 @@
             ],
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
             "time": "2019-06-25T08:45:33+00:00"
+        },
+        {
+            "name": "yubb/loggy",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://bitbucket.org/yubb/loggy.git",
+                "reference": "7eee5fdef65e62e07b97f99cb88901c0bcebb751"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/yubb/loggy/get/7eee5fdef65e62e07b97f99cb88901c0bcebb751.zip",
+                "reference": "7eee5fdef65e62e07b97f99cb88901c0bcebb751",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": ">=5.6",
+                "psr/log": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Loggy": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordan Teachworth",
+                    "email": "jordan.teachworth@zlien.com"
+                }
+            ],
+            "description": "Simple, lightweight logger to stdout in JSON format",
+            "homepage": "https://bitbucket.org/yubb/loggy",
+            "time": "2019-02-14T02:51:22+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",

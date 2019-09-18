@@ -30,7 +30,8 @@
         "symfony/framework-bundle": "4.3.*",
         "symfony/messenger": "4.3.*",
         "symfony/yaml": "4.3.*",
-        "thecodingmachine/safe": "^0.1.16"
+        "thecodingmachine/safe": "^0.1.16",
+        "yubb/loggy": "^2.1"
     },
     "require-dev": {
         "mikey179/vfsstream": "^1.6",
