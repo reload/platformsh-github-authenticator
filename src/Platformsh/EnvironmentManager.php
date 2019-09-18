@@ -76,6 +76,7 @@ class EnvironmentManager implements LoggerAwareInterface
     public function getEnvironmentUrl(string $id)
     {
         $environment = $this->getEnvironment($id);
-        return $environment->getUri();
+        $urls = $environment->getRouteUrls();
+        return array_shift($urls);
     }
 }
