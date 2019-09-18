@@ -59,18 +59,15 @@ class EnvironmentManager implements LoggerAwareInterface
 
     public function isReady($id) : bool
     {
-        $environment = $this->getEnvironment($id);
-        $activities = array_merge(
-            $environment->getActivities(1, 'environment.push'),
-            $environment->getActivities(1, 'environment.activate')
-        );
-        $incomplete_activities = array_filter(
-            $activities,
-            function (Activity $activity) {
-                return $activity->isComplete();
-            }
-        );
-        return !empty($incomplete_activities);
+        return empty($this->currentActivities($id));
+    }
+
+    public function waitForReady($id, callable $logger)
+    {
+        $activities = $this->currentActivities($id);
+        foreach ($activities as $activity) {
+            $activity->wait(null, $logger);
+        }
     }
 
     public function getEnvironmentUrl(string $id)
@@ -78,5 +75,23 @@ class EnvironmentManager implements LoggerAwareInterface
         $environment = $this->getEnvironment($id);
         $urls = $environment->getRouteUrls();
         return array_shift($urls);
+    }
+
+    /**
+     * @return \Platformsh\Client\Model\Activity[]
+     */
+    protected function currentActivities($id): array
+    {
+        $environment = $this->getEnvironment($id);
+        $activities = array_merge(
+            $environment->getActivities(1, 'environment.push'),
+            $environment->getActivities(1, 'environment.activate')
+        );
+        return array_filter(
+            $activities,
+            function (Activity $activity) {
+                return $activity->isComplete();
+            }
+        );
     }
 }
