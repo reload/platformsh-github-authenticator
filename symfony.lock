@@ -1,4 +1,7 @@
 {
+    "bref/bref": {
+        "version": "0.5.5"
+    },
     "clue/stream-filter": {
         "version": "v1.4.1"
     },
@@ -87,6 +90,9 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
+    "hollodotme/fast-cgi-client": {
+        "version": "v2.7.2"
+    },
     "jean85/pretty-package-versions": {
         "version": "1.2"
     },
@@ -113,6 +119,9 @@
     },
     "mikey179/vfsstream": {
         "version": "v1.6.7"
+    },
+    "mnapoli/silly": {
+        "version": "1.7.1"
     },
     "nette/bootstrap": {
         "version": "v3.0.0"
@@ -143,6 +152,9 @@
     },
     "ocramius/package-versions": {
         "version": "1.4.0"
+    },
+    "php-di/invoker": {
+        "version": "2.0.0"
     },
     "php-http/cache-plugin": {
         "version": "1.6.0"
