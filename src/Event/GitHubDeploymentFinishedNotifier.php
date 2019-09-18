@@ -8,12 +8,14 @@ use App\GitHub\Status;
 use App\GitHub\StatusUpdater;
 use App\GitHub\UpdatesPullRequestStatus;
 use App\Platformsh\EnvironmentManager;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use function Safe\sprintf as sprintf;
 
-class GitHubDeploymentFinishedNotifier implements MessageHandlerInterface
+class GitHubDeploymentFinishedNotifier implements MessageHandlerInterface, LoggerAwareInterface
 {
-    use UpdatesPullRequestStatus;
+    use UpdatesPullRequestStatus, LoggerAwareTrait;
 
     /* @var \App\Platformsh\EnvironmentManager */
     private $environmentManager;
@@ -27,9 +29,10 @@ class GitHubDeploymentFinishedNotifier implements MessageHandlerInterface
     public function __invoke(PullRequestSynchronized $event)
     {
         $id = $event->getPullRequest()->getHead()['ref'];
-        if (!$this->environmentManager->isReady($id)) {
-            throw new \RuntimeException(sprintf('Environment %s not ready', $id));
-        }
+        $this->environmentManager->waitForReady($id, function (string $log) {
+            $this->logger->info($log);
+        });
+
         $status = (new Status('success'))
             ->withDescription('Deployment completed')
             ->withTargetUrl($this->environmentManager->getEnvironmentUrl($id));
