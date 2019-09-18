@@ -2,6 +2,9 @@
     "bref/bref": {
         "version": "0.5.5"
     },
+    "bref/symfony-messenger-sns": {
+        "version": "0.2.0"
+    },
     "clue/stream-filter": {
         "version": "v1.4.1"
     },
@@ -79,6 +82,9 @@
         }
     },
     "enqueue/null": {
+        "version": "0.9.12"
+    },
+    "enqueue/sns": {
         "version": "0.9.12"
     },
     "guzzlehttp/guzzle": {
