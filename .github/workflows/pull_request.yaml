@@ -1,0 +1,47 @@
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+name: Build and test
+jobs:
+  check_codestyle:
+    name: Codestyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Installing PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.3
+      - name: Composer install
+        run: composer install
+      - name: Check codestyle
+        run: vendor/bin/phpcs
+  static_code_analysis:
+    name: Static Code Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Installing PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.3
+      - name: Composer install
+        run: composer install
+      - name: Install PHPUnit
+        run: ./bin/phpunit --version
+      - name: Static code analysis
+        run: vendor/bin/phpstan analyse
+  unit_tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Installing PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.3
+      - name: Composer install
+        run: composer install
+      - name: Unit tests
+        run: phpdbg -qrr ./bin/phpunit --coverage-clover=coverage/unit.xml
