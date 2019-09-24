@@ -5,9 +5,9 @@ provider:
   region: eu-central-1
   runtime: provided
   environment:
-    APP_ENV: prod
     APP_DEBUG: true
     AWS_SNS_DSN: enqueue://acme?topic[name]=platformsh-github-authenticator-dev
+    APP_ENV: lambda
 
 plugins:
   - ./vendor/bref/bref
