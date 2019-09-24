@@ -6,8 +6,8 @@ provider:
   runtime: provided
   environment:
     APP_DEBUG: true
-    AWS_SNS_DSN: enqueue://acme?topic[name]=platformsh-github-authenticator-dev
     APP_ENV: lambda
+    AWS_SNS_DSN: enqueue://acme?topic[name]=platformsh-github-authenticator
 
 plugins:
   - ./vendor/bref/bref
@@ -28,4 +28,4 @@ functions:
       - ${bref:layer.php-73} # PHP
       - arn:aws:lambda:eu-central-1:553035198032:layer:git:6
     events:
-      - sns: platformsh-github-authenticator-dev
+      - sns: platformsh-github-authenticator
