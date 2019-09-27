@@ -1,0 +1,40 @@
+@startuml
+skinparam monochrome true
+
+Actor Developer
+Actor Maintainer
+
+Developer -> GitHub : Create pull request
+GitHub -> Authenticator: Webhook: Pull request created
+activate Authenticator
+Authenticator -> GitHub: Get team members
+GitHub -> Authenticator: Team members
+Authenticator -> Authenticator: Is developer part of team?
+Authenticator->GitHub: Create pull request status:\nDeployment started
+Authenticator -> Platform.sh: Push pull request code to create environment
+activate Platform.sh
+Authenticator -> Platform.sh: Environment ready?
+Authenticator -> Platform.sh: Environment ready?
+Platform.sh -> Authenticator: Environment ready
+deactivate Platform.sh
+Authenticator -> GitHub: Update pull request status:\nDeployment completed\nwith link to environment
+deactivate Authenticator
+... Time passes ...
+Developer -> GitHub: Push code to pull request branch
+GitHub -> Authenticator: Webhook: Pull request updated
+Authenticator->GitHub: Create pull request status:\nDeployment started
+Authenticator -> Platform.sh: Push pull request code to update environment
+activate Platform.sh
+Authenticator -> Platform.sh: Environment ready?
+Authenticator -> Platform.sh: Environment ready?
+Platform.sh -> Authenticator: Environment ready
+deactivate Platform.sh
+Authenticator -> GitHub: Update pull request status:\nDeployment completed\nwith link to environment
+deactivate Authenticator
+... Time passes ...
+Maintainer -> GitHub: Merge/close pull request
+GitHub -> Authenticator: Pull request merged/closed
+activate Authenticator
+Authenticator -> Platform.sh: Delete environment
+deactivate Authenticator
+@enduml
