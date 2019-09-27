@@ -90,7 +90,17 @@ Now the `continuous-integration/platformsh` should appear in the list of status 
 
 ## Architecture
 
-Explain how the application is structured.
+The architecture of the system is based on the application:
+ 
+ 1. Responding to GitHub webhooks
+ 2. Using the GitHub API to determine group membership and update pull requests
+ 3. Using Platform.sh API and project git repository to manage environments
+ 
+ The process is described in the following diagram:
+  
+![Architecture](/docs/architecture.svg)
+
+A key element in the application is the fact that it will push code from the project pull request branch to a corresponding branch in the project Platform.sh repository. The Platform.sh git implementation will then automatically create an environment for the branch.
 
 ## Development
 
