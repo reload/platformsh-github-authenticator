@@ -1,6 +1,6 @@
 # Platform.sh GitHub Authenticator
 
-Control who gets automated pull request environments on [Platform.sh](https://platform.sh) by using GitHub teams. Inspired by the [Jenkins GitHub pull request builder plugin]() for Jenkins.
+Control who gets automated pull request environments on [Platform.sh](https://platform.sh) by using GitHub teams. Inspired by the [Jenkins GitHub pull request builder plugin](https://wiki.jenkins.io/display/JENKINS/GitHub+pull+request+builder+plugin).
 
 One use case for this is to use Platform.sh for open source projects, where you want to use the pull request environment functionality to test changes - but only for certain users.
 
@@ -14,10 +14,13 @@ To use this project you need the following:
 
 1. PHP version 7.3 or newer
 2. [Composer](https://getcomposer.org/)
-3. A GitHub repository contaning the code for the project you want to deploy to Platform.sh including sufficient permissions to manage teams and webhooks.
-4. A Platform.sh project to deploy the project code to.
-5. A Platform.sh user with permission to commit code to the project.
-6. An environment capable of processing HTTP requests using PHP. 
+3. A GitHub user for representing the application.
+4. A GitHub repository contaning the code for the project you want to deploy to Platform.sh including sufficient permissions to manage teams and webhooks.
+5. A Platform.sh project to deploy the project code to.
+6. A Platform.sh user with permission to commit code to the project.
+7. An environment capable of processing HTTP requests using PHP and running the git CLI application.
+
+You may want to create user accounts on GitHub and Platform.sh specifically for the application.
 
 ### Setup
 
@@ -38,7 +41,7 @@ composer install
 
 Define the following values in your environment: 
 
-1. `GITHUB_USERNAME`: The username of the GitHub user which will be used to represent the application. You may want to create a user specifically for this.
+1. `GITHUB_USERNAME`: The username of the GitHub user which will be used to represent the application.
 2. `GITHUB_SECRET`: A [personal access token](https://github.blog/2013-05-16-personal-api-tokens/) for the GitHub user. The token must have the following scopes: `repo` and `read:org`.
 3. `GITHUB_WEBHOOK_SECRET`: [A shared secret between GitHub and the application](https://developer.github.com/webhooks/securing/#setting-your-secret-token).
 4. `GITHUB_ORGANIZATION`: The name of the GitHub organisation which users must be a member of to have pull request environments enabled.
@@ -121,8 +124,6 @@ Tests are implemented using [PHPUnit](https://phpunit.de/). Run the tests:
 ```
 ./bin/phpunit
 ```
-
-## Integration testing
 
 ## Serverless deployment
 
