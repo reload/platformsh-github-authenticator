@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: thecodingmachine/php:7.2-v2-cli
+    image: thecodingmachine/php:7.3-v2-cli
     ports:
       - 8080
     command: php -S 0.0.0.0:8080 -t public/
@@ -12,7 +12,7 @@ services:
       APP_ENV: local
       ENQUEUE_DSN: file://%kernel.project_dir%/var/queue
   worker:
-    image: thecodingmachine/php:7.2-v2-cli
+    image: thecodingmachine/php:7.3-v2-cli
     command: ./bin/console messenger:consume -vvv
     volumes:
       - ./:/usr/src/app
