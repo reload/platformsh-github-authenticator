@@ -13,7 +13,7 @@ services:
       ENQUEUE_DSN: file://%kernel.project_dir%/var/queue
   worker:
     image: thecodingmachine/php:7.3-v2-cli
-    command: ./bin/console messenger:consume -vvv
+    command: ./bin/console messenger:consume async -vvv
     volumes:
       - ./:/usr/src/app
     environment:
