@@ -84,8 +84,3 @@ services:
     Platformsh\Client\Connection\Connector:
         calls:
           - [ 'setApiToken', [ '%env(string:PLATFORMSH_API_TOKEN)%', 'exchange' ] ]
-    Loggy:
-        class: Loggy
-        arguments:
-          - 'app'
-    logger: '@Loggy'

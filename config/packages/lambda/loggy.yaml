@@ -1,0 +1,5 @@
+Loggy:
+  class: Loggy
+  arguments:
+    - 'app'
+logger: '@Loggy'
