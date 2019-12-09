@@ -1,5 +1,6 @@
-Loggy:
-  class: Loggy
-  arguments:
-    - 'app'
-logger: '@Loggy'
+services:
+  Loggy:
+    class: Loggy
+    arguments:
+      - 'app'
+  logger: '@Loggy'
