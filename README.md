@@ -6,7 +6,9 @@ One use case for this is to use Platform.sh for open source projects, where you 
 
 ## Getting started
 
-These instructions will get you a copy of the project up and running. See [Development](#development) for getting the project on your local machine for development and testing purposes. See [Deployment](#deployment) for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running.
+
+See [Development](#development) for getting the project on your local machine for development and testing purposes. See [Deployment](#serverless-deployment) for notes on how to deploy the project to AWS Lamdba.
 
 ### Prerequisites
 
@@ -127,9 +129,72 @@ Tests are implemented using [PHPUnit](https://phpunit.de/). Run the tests:
 
 ## Serverless deployment
 
-Add additional notes about how to deploy this to Lambda.
+The application can be deployed to [Amazon AWS Lambda](https://aws.amazon.com/lambda/) and invoked there using [Bref](https://bref.sh/), the [Serverless framework](https://serverless.com/cli/) and a [Git layer](https://github.com/lambci/git-lambda-layer).
+
+The configuration of the application is defined in the included `serverless.yml` file and deployment is handled automatically in the included `push.yaml` GitHub Actions workflow.
+
+To use these features then complete the following steps:
+
+1. [Create an AWS key/secret pair](https://bref.sh/docs/installation/aws-keys.html)
+
+2. Add [your AWS key and secret used to setup the application](https://bref.sh/docs/installation/aws-keys.html) as [GitHub secrets for the repository](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables).
+ 
+3. Add the [environment variable values](#configure-the-environment) to the [Amazon SSM parameter store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html).
+
+If you have the [AWS cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) installed this can be achieved through the following commands:
+
+```shell script
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/aws-target-region --type String --value 'eu-central-1'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/aws-key --type String --value '[YOUR_AWS_KEY]'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/aws-secret --type String --value '[YOUR_AWS_SECRET]'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/github-username --type String --value '${GITHUB_USERNAME}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/github-secret --type String --value '${GITHUB_SECRET}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/github-webhook-secret --type String --value '${GITHUB_WEBHOOK_SECRET}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/github-organization --type String --value '${GITHUB_ORGANIZATION}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/github-team --type String --value '${GITHUB_TEAM}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/platformsh-api-token --type String --value '${PLATFORMSH_API_TOKEN}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/platformsh-project --type String --value '${PLATFORMSH_PROJECT}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/git-repo-url --type String --value '${GIT_REPO_URL}'
+aws ssm put-parameter --region eu-central-1 --name /platformsh-github-authenticator/git-private-key --type String --value '${GIT_PRIVATE_KEY}'
+```
+
+Now, when you push to the `master` and `develop` branches for the repository then the application will de deployed to the `prod` and `dev` environments for the application respectively.
+
+The resulting deployment should have the following output:
+
+```
+Serverless: Packaging service...
+Serverless: Excluding development dependencies...
+Serverless: Uploading CloudFormation file to S3...
+Serverless: Uploading artifacts...
+Serverless: Uploading service platformsh-github-authenticator.zip file to S3 (8.72 MB)...
+Serverless: Validating template...
+Serverless: Updating Stack...
+Serverless: Checking Stack update progress...
+..............................
+Serverless: Stack update finished...
+Service Information
+service: platformsh-github-authenticator
+stage: dev
+region: eu-central-1
+stack: platformsh-github-authenticator-[environment]
+resources: 16
+api keys:
+  None
+endpoints:
+  ANY - https://[unique-id].execute-api.eu-central-1.amazonaws.com/[environment]
+  ANY - https://[unique-id].execute-api.eu-central-1.amazonaws.com/[environment]/{proxy+}
+functions:
+  api: platformsh-github-authenticator-[environment]-api
+  worker: platformsh-github-authenticator-[environment]-worker
+layers:
+  None
+Serverless: Removing old service artifacts from S3...
+Serverless: Run the "serverless" command to setup monitoring, troubleshooting and testing.
+```
+
+Here the endpoint should be used as `[endpoint-url]` when [configuring the Payload URL of the GitHub webhook](#configure-github).
 
 ## Built With
 
 * [Symfony 4](https://symfony.com/4) - Web framework
-* [Bref](https://bref.sh/) - Serverless framework
