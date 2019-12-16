@@ -1,0 +1,25 @@
+on: pull_request
+name: Sync repository
+jobs:
+    sync:
+      name: Sync
+      runs-on: ubuntu-latest
+      steps:
+        - name: Dump GitHub context
+          env:
+            GITHUB_CONTEXT: ${{ toJson(github) }}
+          run: echo "$GITHUB_CONTEXT"
+        - name: Dump event
+          run: cat ${{github.event_path}}
+        - uses: actions/checkout@master
+        - uses: pxgamer/composer-action@master
+          with:
+            command: install --optimize-autoloader --prefer-dist
+        - name: Sync
+          uses: './.github/actions/sync'
+          env:
+            REPO_URL: https://github.com/kasperg/platformsh-github-authenticator
+            GITHUB_ORGANIZATION: reload
+            GITHUB_TEAM: developers
+            GITHUB_AUTH_METHOD: 'jwt'
+            GITHUB_AUTH_USERNAME: ${{ secrets.GITHUB_TOKEN }}
