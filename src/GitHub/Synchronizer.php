@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\GitHub;
 
 use GitWrapper\GitWrapper;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Spatie\Url\Url;
 
 class Synchronizer
@@ -44,22 +45,34 @@ class Synchronizer
         $repoUrl = Url::fromString($repoUrl);
         $authorizedRepoUrl = (string) $repoUrl->withUserInfo($this->username, $this->password);
 
-        $repository = $this->git->cloneRepository($authorizedRepoUrl, $this->getWorkDirectory());
+        $directory = $this->getWorkDirectory();
+        $repository = $this->git->cloneRepository(
+            $authorizedRepoUrl,
+            $directory->path()
+        );
         $repository->checkout($branch);
 
         $repository->addRemote('target', $this->targetRepoUrl);
 
         $repository->push('--force', 'target', $branch);
+
+        $directory->delete();
     }
 
     public function deleteBranch(string $branch)
     {
-        $repository = $this->git->cloneRepository($this->targetRepoUrl, $this->getWorkDirectory());
+        $directory = $this->getWorkDirectory();
+        $repository = $this->git->cloneRepository(
+            $this->targetRepoUrl,
+            $directory->path()
+        );
         $repository->push('--delete', 'origin', $branch);
+
+        $directory->delete();
     }
 
-    protected function getWorkDirectory(): string
+    protected function getWorkDirectory(): TemporaryDirectory
     {
-        return $this->workingDirectory . DIRECTORY_SEPARATOR . uniqid();
+        return (new TemporaryDirectory($this->workingDirectory))->create();
     }
 }
