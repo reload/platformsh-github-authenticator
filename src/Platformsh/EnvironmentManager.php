@@ -86,13 +86,13 @@ class EnvironmentManager implements LoggerAwareInterface
     {
         $environment = $this->getEnvironment($id);
         $activities = array_merge(
-            $environment->getActivities(1, 'environment.push'),
-            $environment->getActivities(1, 'environment.activate')
+            $environment->getActivities(0, 'environment.push'),
+            $environment->getActivities(0, 'environment.activate')
         );
         return array_filter(
             $activities,
             function (Activity $activity) {
-                return $activity->isComplete();
+                return !$activity->isComplete();
             }
         );
     }
