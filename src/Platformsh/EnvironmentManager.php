@@ -27,18 +27,16 @@ class EnvironmentManager implements LoggerAwareInterface
         $this->project = $project;
     }
 
-    public function activate(string $id)
+    public function activate(string $id) : ?Activity
     {
         $environment = $this->getEnvironment($id);
-
-        if (!$environment->isActive()) {
-            $activity = $environment->activate();
-        }
+        return (!$environment->isActive()) ? $environment->activate() : null;
     }
 
-    public function deactivate(string $id)
+    public function deactivate(string $id) : ?Activity
     {
-        $this->getEnvironment($id)->deactivate();
+        $environment = $this->getEnvironment($id);
+        return ($environment->isActive()) ? $environment->deactivate() : null;
     }
 
     private function getEnvironment(string $id)
