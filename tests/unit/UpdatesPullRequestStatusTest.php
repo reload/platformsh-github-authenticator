@@ -24,6 +24,10 @@ class UpdatesPullRequestStatusTest extends TestCase
         );
         $pullRequest = $this->createMock(PullRequest::class);
         $pullRequest->method('getHead')->willReturn([
+            'repo' => ['full_name' => 'pullrequester/repository'],
+            'sha' => 'sha1234'
+        ]);
+        $pullRequest->method('getBase')->willReturn([
             'repo' => ['full_name' => 'owner/repository'],
             'sha' => 'sha1234'
         ]);

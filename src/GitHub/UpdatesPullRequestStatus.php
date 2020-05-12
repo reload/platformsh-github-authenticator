@@ -15,8 +15,9 @@ trait UpdatesPullRequestStatus
     protected function updateStatus(PullRequest $pullRequest, Status $status)
     {
         $head = $pullRequest->getHead();
-        list($owner, $repository) = explode('/', $head['repo']['full_name']);
         $sha = $head['sha'];
+        $base = $pullRequest->getBase();
+        list($owner, $repository) = explode('/', $base['repo']['full_name']);
         $this->statusUpdater->createStatus($owner, $repository, $sha, $status);
     }
 }
