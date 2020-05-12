@@ -42,3 +42,8 @@ functions:
       - arn:aws:lambda:eu-central-1:553035198032:layer:git:6
     events:
       - sns: platformsh-github-authenticator
+
+package:
+  exclude:
+    - var/**
+    - tests/**
