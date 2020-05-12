@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Platformsh;
 
 use Platformsh\Client\Model\Activity;
+use Platformsh\Client\Model\Environment;
 use Platformsh\Client\PlatformClient;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -39,7 +40,7 @@ class EnvironmentManager implements LoggerAwareInterface
         return ($environment->isActive()) ? $environment->deactivate() : null;
     }
 
-    private function getEnvironment(string $id)
+    private function getEnvironment(string $id) : Environment
     {
         $project = $this->platform->getProject($this->project);
         if (!$project) {
