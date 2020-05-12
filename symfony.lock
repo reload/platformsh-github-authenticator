@@ -273,6 +273,9 @@
             "ref": "9a7119f609b576a30dbf03e4fe44212388e96ea1"
         }
     },
+    "stechstudio/backoff": {
+        "version": "1.0.1"
+    },
     "swop/github-webhook": {
         "version": "v2.0"
     },

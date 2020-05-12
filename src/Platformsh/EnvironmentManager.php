@@ -8,6 +8,7 @@ use Platformsh\Client\Model\Activity;
 use Platformsh\Client\PlatformClient;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use RuntimeException;
 use function Safe\sprintf as sprintf;
 
 class EnvironmentManager implements LoggerAwareInterface
@@ -70,10 +71,13 @@ class EnvironmentManager implements LoggerAwareInterface
         }
     }
 
-    public function getEnvironmentUrl(string $id)
+    public function getEnvironmentUrl(string $id) : string
     {
         $environment = $this->getEnvironment($id);
         $urls = $environment->getRouteUrls();
+        if (empty($urls)) {
+            throw new RuntimeException('No url for environment');
+        }
         return array_shift($urls);
     }
 

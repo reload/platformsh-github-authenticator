@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f2ac359a5fdb0d887ded5f517aad01b2",
+    "content-hash": "caecd8ad98fb54dba0e39cda1469f216",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -3199,6 +3199,45 @@
             "time": "2019-08-11T20:06:19+00:00"
         },
         {
+            "name": "stechstudio/backoff",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stechstudio/backoff.git",
+                "reference": "88b9a4a5da1cc5485e6fb0c5d35ee0d4149c3361"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stechstudio/backoff/zipball/88b9a4a5da1cc5485e6fb0c5d35ee0d4149c3361",
+                "reference": "88b9a4a5da1cc5485e6fb0c5d35ee0d4149c3361",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "STS\\Backoff\\": "src"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joseph Szobody",
+                    "email": "joseph@stechstudio.com"
+                }
+            ],
+            "description": "PHP library providing retry functionality with multiple backoff strategies and jitter support",
+            "time": "2018-07-18T16:59:44+00:00"
+        },
+        {
             "name": "swop/github-webhook",
             "version": "v2.0",
             "source": {
@@ -5340,6 +5379,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-diactoros",
             "time": "2019-08-06T17:53:53+00:00"
         }
     ],

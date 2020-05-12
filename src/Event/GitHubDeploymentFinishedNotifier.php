@@ -33,9 +33,16 @@ class GitHubDeploymentFinishedNotifier implements MessageHandlerInterface, Logge
             $this->logger->info($log);
         });
 
+        // Even though the environment may not have any activities pending
+        // urls might still not be ready. Retry up to 10 times waiting 1000ms
+        // between each attempt.
+        $environmentUrl = backoff(function () use ($id) {
+            return $this->environmentManager->getEnvironmentUrl($id);
+        }, 10, 1000);
+
         $status = (new Status('success'))
             ->withDescription('Deployment completed')
-            ->withTargetUrl($this->environmentManager->getEnvironmentUrl($id));
+            ->withTargetUrl($environmentUrl);
         $this->updateStatus($event->getPullRequest(), $status);
     }
 }
