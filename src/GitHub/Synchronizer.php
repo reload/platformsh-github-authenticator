@@ -62,10 +62,16 @@ class Synchronizer
     public function deleteBranch(string $branch)
     {
         $directory = $this->getWorkDirectory();
-        $repository = $this->git->cloneRepository(
-            $this->targetRepoUrl,
-            $directory->path()
-        );
+
+        // Platform.sh can be fickle when cloning and will sometimes wrongfully
+        // reject our public SSH key. Try a couple of times to see if that makes
+        // it work.
+        $repository = backoff(function () use ($directory) {
+            return $this->git->cloneRepository(
+                $this->targetRepoUrl,
+                $directory->path()
+            );
+        }, 3, 3000);
         $repository->push('--delete', 'origin', $branch);
 
         $directory->delete();
