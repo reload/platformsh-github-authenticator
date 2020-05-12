@@ -9,6 +9,7 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use function Safe\sprintf as sprintf;
 
 class SnsErrorLogger implements EventSubscriberInterface, LoggerAwareInterface
 {
@@ -43,8 +44,13 @@ class SnsErrorLogger implements EventSubscriberInterface, LoggerAwareInterface
                 'SNS error',
                 [
                     'error' => get_class($error),
-                    'exception_class' => get_class($throwable),
-                    'exception' => $throwable,
+                    'exception' => sprintf(
+                        "%s: %s in %s:%s",
+                        get_class($throwable),
+                        $throwable->getMessage(),
+                        $throwable->getFile(),
+                        $throwable->getLine()
+                    ),
                     'trace' => $throwable->getTrace()
                 ]
             );
