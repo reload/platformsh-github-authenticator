@@ -48,9 +48,9 @@ Define the following values in your environment:
 3. `GITHUB_WEBHOOK_SECRET`: [A shared secret between GitHub and the application](https://developer.github.com/webhooks/securing/#setting-your-secret-token).
 4. `GITHUB_ORGANIZATION`: The name of the GitHub organisation which users must be a member of to have pull request environments enabled.
 5. `GITHUB_TEAM`: The name of the GitHub organisation tram which users must be a member of to have pull request environments enabled.
-6. `PLATFORMSH_API_TOKEN`: The [Platform.sh API token](Platform.sh API) to use to access the Platform.sh API. 
+6. `PLATFORMSH_API_TOKEN`: The [Platform.sh API token](Platform.sh API) to use to access the Platform.sh API.
 7. `PLATFORMSH_PROJECT`: The id of the Platform.sh project to use when publishing pull request environments. When you go to the project console the id is the trailing part of the url: `https://console.platform.sh/[organization]/[project_id]`.
-8. `GIT_REPO_URL`: The url for the project repository on Platform.sh. 
+8. `GIT_REPO_URL`: The url for the project repository on Platform.sh.
 9. `GIT_PRIVATE_KEY`: The SSH private key to use when synchronizing commits from pull requests to Platform.sh. The corresponding [public key must be added to the Platform.sh user](https://docs.platform.sh/development/ssh.html#add-the-ssh-key-to-your-platform-account) which will be used to perform the synchronization.
 
 These can be defined as environment variables or by creating an [`.env.local` file](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables) in the root of the checkout which contains the environment variables.
@@ -91,18 +91,18 @@ git push origin platformsh-test
 
 Then open a pull request from the branch against the default branch for the repository. The user opening the pull request should be member of the organisation and team configured in the environment.
 
-Now the `continuous-integration/platformsh` should appear in the list of status checks for the pull request displaying the status of the deployment to Platform.sh. 
+Now the `continuous-integration/platformsh` should appear in the list of status checks for the pull request displaying the status of the deployment to Platform.sh.
 
 ## Architecture
 
 The architecture of the system is based on the application:
- 
+
  1. Responding to GitHub webhooks
  2. Using the GitHub API to determine group membership and update pull requests
  3. Using Platform.sh API and project git repository to manage environments
- 
+
  The process is described in the following diagram:
-  
+
 ![Architecture](/docs/architecture.svg)
 
 A key element in the application is the fact that it will push code from the project pull request branch to a corresponding branch in the project Platform.sh repository. The Platform.sh git implementation will then automatically create an environment for the branch.
@@ -117,7 +117,7 @@ docker-compose up
 
 In this setup [ngrok](https://ngrok.com/) is used to expose the application externally. The url for the application can be identified by accessing the ngrok user interface.
 
-In this setup the url for the webhook will be `https://[unique-id].ngrok.io/webhook`. 
+In this setup the url for the webhook will be `https://[unique-id].ngrok.io/webhook`.
 
 ## Unit tests
 
@@ -138,7 +138,7 @@ To use these features then complete the following steps:
 1. [Create an AWS key/secret pair](https://bref.sh/docs/installation/aws-keys.html)
 
 2. Add [your AWS key and secret used to setup the application](https://bref.sh/docs/installation/aws-keys.html) as [GitHub secrets for the repository](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables).
- 
+
 3. Add the [environment variable values](#configure-the-environment) to the [Amazon SSM parameter store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html).
 
 If you have the [AWS cli](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) installed this can be achieved through the following commands:
