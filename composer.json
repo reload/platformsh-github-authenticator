@@ -13,11 +13,11 @@
         "ext-iconv": "*",
         "bref/bref": "^0.5.5",
         "bref/symfony-messenger-sns": "^0.2.0",
+        "composer/package-versions-deprecated": "^1.11",
         "cpliakas/git-wrapper": "^2.2",
         "cweagans/composer-patches": "^1.6",
         "enqueue/fs": "^0.9.12",
         "knplabs/github-api": "^2.11",
-        "lp-digital/github-event-parser": "^0.8.3",
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/logger-plugin": "^1.1",
         "platformsh/client": "^2.1",
@@ -52,7 +52,8 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "Lpdigital\\Github\\": "lp-digital/github-event-parser/"
         }
     },
     "autoload-dev": {

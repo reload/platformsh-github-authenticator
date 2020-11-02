@@ -1,4 +1,7 @@
 {
+    "aws/aws-sdk-php": {
+        "version": "3.112.6"
+    },
     "bref/bref": {
         "version": "0.5.5"
     },
@@ -128,6 +131,9 @@
     },
     "mnapoli/silly": {
         "version": "1.7.1"
+    },
+    "mtdowling/jmespath.php": {
+        "version": "2.4.0"
     },
     "nette/bootstrap": {
         "version": "v3.0.0"

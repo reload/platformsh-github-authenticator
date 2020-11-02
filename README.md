@@ -39,9 +39,14 @@ cd platformsh-github-authenticator
 composer install
 ```
 
-#### Configure the environment 
 
-Define the following values in your environment: 
+Note: This repository contains a copy of
+[lp-digital/github-event-parser](https://packagist.org/packages/lp-digital/github-event-parser)
+v0.8.3, as the repo has disappeared from GitHub.
+
+#### Configure the environment
+
+Define the following values in your environment:
 
 1. `GITHUB_USERNAME`: The username of the GitHub user which will be used to represent the application.
 2. `GITHUB_SECRET`: A [personal access token](https://github.blog/2013-05-16-personal-api-tokens/) for the GitHub user. The token must have the following scopes: `repo` and `read:org`.

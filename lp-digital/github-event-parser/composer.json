@@ -1,0 +1,33 @@
+{
+    "name": "lp-digital/github-event-parser",
+    "description": "PHP library to get a readable representation of events dispatched by Github API v3",
+    "type": "library",
+    "license": "GPL-3.0+",
+    "keywords": ["github", "event", "json parser"],
+    "homepage": "https://github.com/Lp-digital/github-event-parser",
+    "authors": [
+        {
+            "name": "Mickaël Andrieu",
+            "email": "mickael.andrieu@lp-digital.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Lpdigital\\Github\\": "" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "Tests/" }
+    },
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.7",
+        "friendsofphp/php-cs-fixer": "~1.11"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
